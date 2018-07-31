@@ -1,0 +1,30 @@
+{
+    "presets": [
+        [
+            "env",
+            {
+                "targets": {
+                    "browsers": "> 1%"
+                },
+                "include": [
+                    "transform-es2015-destructuring",
+                    "transform-es2015-parameters"
+                ]
+            }
+        ], "react"
+    ],
+    "plugins": [
+        "syntax-dynamic-import",
+        "syntax-object-rest-spread",
+        "transform-class-properties", [
+            "module-resolver", {
+                "root": ["./src", "./server"]
+            }
+        ]
+    ],
+    "env": {
+        "test": {
+            "plugins": ["dynamic-import-node"]
+        }
+    }
+}
