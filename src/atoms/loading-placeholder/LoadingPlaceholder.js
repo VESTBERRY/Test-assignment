@@ -1,9 +1,17 @@
 import React from 'react'
+import {css, cx} from 'react-emotion'
 
-const style = {
-  width: '1000px',
-  height: '1000px',
-  backgroundColor: 'red'
+export const LoadingPlaceholder = () => (
+  <div className={cx(styl.root)}>
+    LoadingPlaceholder...
+  </div>
+)
+
+const styl = {
+  root: css`
+    display: block;
+    width: 1000px;
+    height: 200px;
+    background-color: red;
+  `,
 }
-
-export const LoadingPlaceholder = () => (<div style={style}>LoadingPlaceholder...</div>)

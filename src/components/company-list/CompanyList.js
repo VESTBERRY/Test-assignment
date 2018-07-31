@@ -3,24 +3,49 @@ import PropTypes from 'prop-types'
 
 import pageQueries from '../../Page.queries'
 
-import {Section, SectionTitle, SectionContent} from '../../atoms/section'
-import {LoadingPlacehoder} from '../../atoms/loading-placeholder'
+import {Section, SectionHeader, SectionContent} from '../../atoms/section'
 
-export const CompanyListRenderer = ({loading, company}) => {
-  console.log('company', company)
-  console.log('place', LoadingPlacehoder)
-  console.log('sec', Section, SectionContent, SectionTitle)
+// import {CompanyListItem} from './CompanyListItem'
+
+export const CompanyListRenderer = ({loading, company: companies}) => {
+  console.log('company', companies)
+
+  // return (
+  //   <table>
+  //     <tr>
+  //       <th>COMPANY NAME</th>
+  //       <th>STAGE</th>
+  //       <th>SECTOR</th>
+  //       <th>INVESTMENT SIZE</th>
+  //     </tr>
+  //     {
+  //       company.map((company, i) =>
+  //         <tr key={i}>
+  //           <td>{company.name}</td>
+  //           <td>{company.stage}</td>
+  //           <td>{company.sector}</td>
+  //           <td>{company.investmentSize}</td>
+  //         </tr>
+  //       )
+  //     }
+  //   </table>
+  // )
 
   return (
-    <Section>
-      <SectionTitle>
-        Title
-      </SectionTitle>
-      <SectionContent>
-        {/* <LoadingPlacehoder /> */}
-        Content
-      </SectionContent>
-    </Section>
+    <React.Fragment>
+      <Section>
+        <SectionHeader>
+          CompanyList
+        </SectionHeader>
+        <SectionContent>
+          {companies.map(company => (
+            <div key={company.id}>
+              {company.name} | {company.stage} | {company.sector} | {company.investmentSize}
+            </div>
+          ))}
+        </SectionContent>
+      </Section>
+    </React.Fragment>
   )
 }
 

@@ -14,6 +14,10 @@ const CompanyType = new GraphQLObjectType({
 
   fields: () => {
     return {
+      id: {
+        type: GraphQLString,
+        resolve: company => company.id,
+      },
       name: {
         type: GraphQLString,
         resolve: company => company.name,
@@ -36,8 +40,9 @@ const CompanyType = new GraphQLObjectType({
 
 const sectors = ['Fintech', 'IOT', 'Roboadvisory', 'Insuretech']
 const stages = ['Idea', 'Prototype', 'Seed', 'Series A', 'Series B', 'Series C']
-const companies = [...Array(Math.round(Math.random() * 3 + 1)).keys()]
+const companies = [...Array(Math.round(Math.random() * 3 + 7)).keys()]
   .map(() => ({
+    id: casual.random,
     name: casual.company_name,
     stage: casual.random_element(stages),
     sector: casual.random_element(sectors),

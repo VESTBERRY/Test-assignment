@@ -24,6 +24,7 @@
         "apollo-client": "^2.3.7",
         "apollo-client-preset": "^1.0.8",
         "dataloader": "^1.4.0",
+        "emotion": "^9.2.6",
         "exports-loader": "^0.7.0",
         "express": "^4.16.3",
         "express-graphql": "^0.6.12",
@@ -36,6 +37,8 @@
         "react-apollo": "^2.1.9",
         "react-css-modules": "^4.7.4",
         "react-dom": "^16.4.1",
+        "react-emotion": "^9.2.6",
+        "react-modal": "^3.5.1",
         "recompose": "^0.28.0"
     },
     "devDependencies": {

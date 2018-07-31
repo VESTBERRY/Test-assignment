@@ -1,3 +1,3 @@
 export {Section} from './Section'
-export {SectionTitle} from './SectionTitle'
+export {SectionHeader} from './SectionHeader'
 export {SectionContent} from './SectionContent'
