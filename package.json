@@ -35,10 +35,12 @@
         "react": "^16.4.1",
         "react-apollo": "^2.1.9",
         "react-css-modules": "^4.7.4",
-        "react-dom": "^16.4.1"
+        "react-dom": "^16.4.1",
+        "recompose": "^0.28.0"
     },
     "devDependencies": {
         "autoprefixer": "^9.0.1",
+        "babel-cli": "^6.26.0",
         "babel-core": "^6.26.3",
         "babel-eslint": "^8.2.6",
         "babel-loader": "^7.1.5",
