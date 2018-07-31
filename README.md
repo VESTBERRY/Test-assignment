@@ -36,6 +36,7 @@ Start with prepared project we have created with our backend
 ## Requirements
 * node `^10.7.0`
 * yarn `^1.9.2` or npm `^6.2.0`
+* babel-cli `^6.26.0`
 
 ## Installation
 
