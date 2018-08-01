@@ -4,10 +4,9 @@ import PropTypes from 'prop-types'
 import pageQueries from '../../Page.queries'
 
 import {Modal} from '../../atoms/modal'
-// import ReactModal from 'react-modal'
 import {Section, SectionHeader, SectionContent, SectionFooter} from '../../atoms/section'
 
-// import {CompanyListItem} from './CompanyListItem'
+import {AddCompanyForm} from '../add-company-form'
 
 class CompanyListRenderer extends React.Component {
   state = {
@@ -50,14 +49,9 @@ class CompanyListRenderer extends React.Component {
           onRequestClose={this.closeModal}
         >
           {modal => (
-            <div style={{width: '400px'}}>
-              Modal content
-            </div>
+            <AddCompanyForm />
           )}
         </Modal>
-        {/* <ReactModal isOpen>
-          Yo
-        </ReactModal> */}
         <Section>
           <SectionHeader>
             CompanyList

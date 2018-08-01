@@ -24,16 +24,3 @@
   top: 0 !important;
   transform: translate(-50%, -100%) !important;
 }
-
-.ReactModal__Content--fullscreen.ReactModal__Content--after-open {
-  transform: scale(1);
-}
-
-.ReactModal__Content--fullscreen.ReactModal__Content--before-close {
-  transform: scale(0);
-}
-
-.ReactModal__Content--fullscreen {
-  transform: scale(0);
-  transform-origin: center 40px;
-}
