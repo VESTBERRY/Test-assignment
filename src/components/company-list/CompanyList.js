@@ -30,7 +30,7 @@ class CompanyListRenderer extends React.Component {
           footer={null}
           onCancel={() => this.closeModal()}
         >
-          <AddCompanyForm />
+          <AddCompanyForm onSubmitSuccess={this.closeModal} />
         </Modal>
         <Section>
           <SectionContent>
@@ -43,7 +43,7 @@ class CompanyListRenderer extends React.Component {
           </SectionFooter>
         </Section>
         <Section>
-          <AddCompanyForm />
+          {/* <AddCompanyForm /> */}
         </Section>
       </React.Fragment>
     )

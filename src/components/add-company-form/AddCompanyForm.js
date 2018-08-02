@@ -4,7 +4,7 @@ import {Formik, FormikConsumer} from 'formik'
 import * as Yup from 'yup'
 import {css, cx} from 'react-emotion'
 import {compose} from 'react-apollo'
-import {Input, Select, Layout, Button, Form} from 'antd'
+import {Input, Select, Button, Form, Row, Col} from 'antd'
 import companyQueries from '../../queries/company'
 import sectorQueries from '../../queries/sector'
 import stageQueries from '../../queries/stage'
@@ -12,9 +12,17 @@ import stageQueries from '../../queries/stage'
 const FormItemFeedback = ({children, name}) => (
   <FormikConsumer>
     {({errors, touched, submitCount}) => {
+      const hasError = !!errors[name]
+      const hasTouch = !!touched[name]
+      const showFeedback = (hasError && hasTouch) || submitCount > 0
+
+      if (!showFeedback) {
+        return <Form.Item>{children}</Form.Item>
+      }
+
       return (
         <Form.Item
-          hasFeedback={submitCount > 0 || (!!errors[name] && touched[name])}
+          hasFeedback
           validateStatus={errors[name] && 'error'}
           help={errors[name]}
         >
@@ -26,12 +34,14 @@ const FormItemFeedback = ({children, name}) => (
 )
 FormItemFeedback.propTypes = {
   name: PropTypes.string,
+  label: PropTypes.string,
   children: PropTypes.node,
 }
-const TextField = ({name, placeholder}) => (
+const TextField = ({name, placeholder, label}) => (
   <FormikConsumer>
     {({values, setFieldValue, setFieldTouched}) => (
       <FormItemFeedback name={name}>
+        <div>{label}</div>
         <Input
           type="text"
           placeholder={placeholder}
@@ -45,18 +55,19 @@ const TextField = ({name, placeholder}) => (
 )
 TextField.propTypes = {
   name: PropTypes.string,
+  label: PropTypes.string,
   placeholder: PropTypes.string,
 }
-const MoneyField = ({name, placeholder, currency}) => (
+const MoneyField = ({name, placeholder, currency, label}) => (
   <FormikConsumer>
     {({values, setFieldValue, setFieldTouched}) => (
       <FormItemFeedback name={name}>
+        <div>{label}</div>
         <Input
           value={values[name]}
           style={{
             width: '100%',
           }}
-          min={0}
           placeholder={placeholder}
           onBlur={() => setFieldTouched(name)}
           onChange={event => setFieldValue(name, event.target.value)}
@@ -68,15 +79,17 @@ const MoneyField = ({name, placeholder, currency}) => (
 )
 MoneyField.propTypes = {
   name: PropTypes.string,
+  label: PropTypes.string,
   placeholder: PropTypes.string,
   currency: PropTypes.string,
 }
-const SelectField = ({name, selectOptions, defaultOption}) => (
+const SelectField = ({name, selectOptions, defaultOption, label}) => (
   <FormikConsumer>
     {({values, setFieldValue, setFieldTouched}) => (
       <FormItemFeedback name={name}>
+        <div>{label}</div>
         <Select
-          onChange={event => setFieldValue(name, event.target.value)}
+          onChange={event => setFieldValue(name, event)}
           onBlur={() => setFieldTouched(name)}
           defaultValue={defaultOption}
         >
@@ -90,6 +103,7 @@ const SelectField = ({name, selectOptions, defaultOption}) => (
 )
 SelectField.propTypes = {
   name: PropTypes.string,
+  label: PropTypes.string,
   selectOptions: PropTypes.array,
   defaultOption: PropTypes.string,
 }
@@ -106,7 +120,7 @@ const transformMutationErrorToFormikErrors = mutationError => {
  *
  * TODO Pass around nice graphql errors after mutation
  */
-const AddCompanyFormRenderer = ({stage, sector, companyTypeForm, addCompany}) => (
+const AddCompanyFormRenderer = ({stage, sector, companyTypeForm, addCompany, onSubmitSuccess}) => (
   <Formik
     initialValues={{
       name: '',
@@ -123,40 +137,51 @@ const AddCompanyFormRenderer = ({stage, sector, companyTypeForm, addCompany}) =>
         .required('Investment size is required'),
     })}
     onSubmit={async (values, formik) => {
-      console.log('values', values)
+      // console.log('values', values)
+      console.log('formik', formik)
       try {
-        const company = await addCompany({variables: {...values}})
-        console.log('company', company)
+        await addCompany({variables: {...values}})
+        formik.resetForm()
+        onSubmitSuccess()
       } catch (mutationErrors) {
-        const formikErrors = transformMutationErrorToFormikErrors(mutationErrors)
-        formik.setErrors(formikErrors)
+        if (mutationErrors && mutationErrors.graphQLErrors) {
+          console.error('mutationErrors', mutationErrors.graphQLErrors)
+          const formikErrors = transformMutationErrorToFormikErrors(mutationErrors)
+          formik.setErrors(formikErrors)
+        }
       }
     }}
     render={formik => {
+      console.log('formik', formik)
+      // console.log('formik.values', formik.values)
       return (
         <div>
-          <Layout>
-            <Layout.Header style={{
+          <Row>
+            <Col style={{
               textAlign: 'center'
             }}>
               <h2>ADD NEW COMPANY</h2>
-            </Layout.Header>
-            <Layout.Content>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
               <Form layout="vertical">
-                <TextField name="name" placeholder="Company name" />
-                <SelectField name="stage" defaultOption={stage[0]} selectOptions={stage} />
-                <SelectField name="sector" defaultOption={sector[0]} selectOptions={sector} />
-                <MoneyField name="investmentSize" placeholder="Enter amount" currency="EUR" />
+                <TextField name="name" placeholder="Company name" label="Company name" />
+                <SelectField name="stage" defaultOption={stage[0]} selectOptions={stage} label="Stage" />
+                <SelectField name="sector" defaultOption={sector[0]} selectOptions={sector} label="Sector" />
+                <MoneyField name="investmentSize" placeholder="Enter amount" currency="EUR" label="Investment size" />
               </Form>
-            </Layout.Content>
-            <Layout.Footer style={{
+            </Col>
+          </Row>
+          <Row>
+            <Col style={{
               textAlign: 'center'
             }}>
               <Button type="button" onClick={() => formik.submitForm()}>
                 Add New Company
               </Button>
-            </Layout.Footer>
-          </Layout>
+            </Col>
+          </Row>
         </div>
       )
     }}
@@ -168,6 +193,7 @@ AddCompanyFormRenderer.propTypes = {
   sector: PropTypes.arrayOf(PropTypes.string),
   stage: PropTypes.arrayOf(PropTypes.string),
   companyTypeForm: PropTypes.object,
+  onSubmitSuccess: PropTypes.func
 }
 
 export const AddCompanyForm = compose(
