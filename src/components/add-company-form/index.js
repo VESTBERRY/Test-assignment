@@ -1,1 +1,1 @@
-export {AddCompanyForm} from './AddCompanyForm'
+export {AddCompanyForm, AddCompanyFormRenderer} from './AddCompanyForm'

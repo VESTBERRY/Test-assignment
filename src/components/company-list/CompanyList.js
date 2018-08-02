@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import {Table} from 'antd'
 
-import pageQueries from '../../Page.queries'
-
+import companyQueries from '../../queries/company'
 import {Modal} from '../../atoms/modal'
 import {Section, SectionHeader, SectionContent, SectionFooter} from '../../atoms/section'
-
 import {AddCompanyForm} from '../add-company-form'
 
 class CompanyListRenderer extends React.Component {
@@ -17,30 +16,10 @@ class CompanyListRenderer extends React.Component {
   closeModal = () => this.setState({isModalOpen: false})
 
   render () {
-    const {company: companies} = this.props
+    const {companiesForTable, companiesColumnsForTable} = this.props
     const {isModalOpen} = this.state
 
-    // console.log('company', companies)
-    // return (
-    //   <table>
-    //     <tr>
-    //       <th>COMPANY NAME</th>
-    //       <th>STAGE</th>
-    //       <th>SECTOR</th>
-    //       <th>INVESTMENT SIZE</th>
-    //     </tr>
-    //     {
-    //       company.map((company, i) =>
-    //         <tr key={i}>
-    //           <td>{company.name}</td>
-    //           <td>{company.stage}</td>
-    //           <td>{company.sector}</td>
-    //           <td>{company.investmentSize}</td>
-    //         </tr>
-    //       )
-    //     }
-    //   </table>
-    // )
+    console.log('propz', this.props)
 
     return (
       <React.Fragment>
@@ -48,20 +27,11 @@ class CompanyListRenderer extends React.Component {
           isOpen={isModalOpen}
           onRequestClose={this.closeModal}
         >
-          {modal => (
-            <AddCompanyForm />
-          )}
+          {modal => <AddCompanyForm />}
         </Modal>
         <Section>
-          <SectionHeader>
-            CompanyList
-          </SectionHeader>
           <SectionContent>
-            {companies.map(company => (
-              <div key={company.id}>
-                {company.name} | {company.stage} | {company.sector} | {company.investmentSize}
-              </div>
-            ))}
+            <Table dataSource={companiesForTable} columns={companiesColumnsForTable.fields} />
           </SectionContent>
           <SectionFooter>
             <button onClick={this.openModal}>
@@ -75,8 +45,15 @@ class CompanyListRenderer extends React.Component {
 }
 
 CompanyListRenderer.propTypes = {
-  company: PropTypes.array,
-  // addCompany: PropTypes.func,
+  // companies: PropTypes.array,
+  companiesForTable: PropTypes.array,
+  companiesColumnsForTable: PropTypes.array,
 }
 
-export const CompanyList = pageQueries(CompanyListRenderer)
+CompanyListRenderer.defaultProps = {
+  companies: [],
+  companiesForTable: [],
+  companiesColumnsForTable: [],
+}
+
+export const CompanyList = companyQueries(CompanyListRenderer)

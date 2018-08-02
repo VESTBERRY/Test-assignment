@@ -1,6 +1,6 @@
 import React from 'react'
 import {ApolloProvider} from 'react-apollo'
-import Page from './Page'
+import {TestAssignmentPage} from './pages/test-assignment-page'
 import client from './apollo'
 import styles from 'App.scss'
 
@@ -11,7 +11,7 @@ const App = () =>
     </div>
     <div className={styles.content}>
       <ApolloProvider client={client}>
-        <Page />
+        <TestAssignmentPage />
       </ApolloProvider>
     </div>
   </div>

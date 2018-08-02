@@ -78,19 +78,31 @@ const query = new GraphQLObjectType({
 })
 
 const addCompany = (obj, company) => {
+  // const errors = []
+
   if (company.name.length <= 2) {
+    // errors.push(new GraphQLError('Company name has to be longer then 2 characters'))
     throw new GraphQLError('Company name has to be longer then 2 characters')
   }
   if (stages.indexOf(company.stage) === -1) {
+    // errors.push(new GraphQLError('Company stage must be in the list'))
     throw new GraphQLError('Company stage must be in the list')
   }
   if (sectors.indexOf(company.sector) === -1) {
+    // errors.push(new GraphQLError('Company sector must be in the list'))
     throw new GraphQLError('Company sector must be in the list')
   }
   if (company.investmentSize < 0) {
+    // errors.push(new GraphQLError('Investment size has to be positive number'))
     throw new GraphQLError('Investment size has to be positive number')
   }
+
+  // if (errors.length < 0) {
+  //   throw new GraphQLError()
+  // }
+
   companies.push(company)
+
   return company
 }
 
