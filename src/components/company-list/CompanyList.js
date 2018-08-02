@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Table} from 'antd'
+import {Table, Modal, Button} from 'antd'
 
 import companyQueries from '../../queries/company'
-import {Modal} from '../../atoms/modal'
 import {Section, SectionHeader, SectionContent, SectionFooter} from '../../atoms/section'
 import {AddCompanyForm} from '../add-company-form'
 
@@ -24,20 +23,27 @@ class CompanyListRenderer extends React.Component {
     return (
       <React.Fragment>
         <Modal
-          isOpen={isModalOpen}
-          onRequestClose={this.closeModal}
+          visible={isModalOpen}
+          onOk={() => {
+            this.closeModal()
+          }}
+          footer={null}
+          onCancel={() => this.closeModal()}
         >
-          {modal => <AddCompanyForm />}
+          <AddCompanyForm />
         </Modal>
         <Section>
           <SectionContent>
             <Table dataSource={companiesForTable} columns={companiesColumnsForTable.fields} />
           </SectionContent>
           <SectionFooter>
-            <button onClick={this.openModal}>
-              Add company
-            </button>
+            <Button type="primary" onClick={this.openModal}>
+              Add Company
+            </Button>
           </SectionFooter>
+        </Section>
+        <Section>
+          <AddCompanyForm />
         </Section>
       </React.Fragment>
     )
@@ -47,7 +53,7 @@ class CompanyListRenderer extends React.Component {
 CompanyListRenderer.propTypes = {
   // companies: PropTypes.array,
   companiesForTable: PropTypes.array,
-  companiesColumnsForTable: PropTypes.array,
+  companiesColumnsForTable: PropTypes.object,
 }
 
 CompanyListRenderer.defaultProps = {

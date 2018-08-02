@@ -11,7 +11,13 @@ app.use('/graphql', graphqlHTTP(req =>
   ({
     schema: schema,
     context: req,
-    graphiql: true
+    graphiql: true,
+    formatError: error => ({
+      message: error.message,
+      state: error.originalError && error.originalError.state,
+      locations: error.locations,
+      path: error.path,
+    })
   })
 ))
 

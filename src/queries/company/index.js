@@ -12,8 +12,12 @@ const companyFields = gql`
   }
 `
 
+// const directives = gql`
+//   directive @formType(type: String): on TYPE
+// `
+
 /**
- *  How to omit id from fields?
+ * @FIXME How to omit id from fields?
  */
 const getCompanies = gql`
   ${companyFields}
@@ -26,8 +30,15 @@ const getCompanies = gql`
       ...companyFields
       key: id
     }
+    companyTypeForm: __type(name: "CompanyTypeForm") {
+      fields {
+        name
+        type {
+          name
+        }
+      }
+    }
     companiesColumnsForTable: __type(name: "Company") {
-      name
       fields {
         title: name
         dataIndex: name
@@ -35,20 +46,6 @@ const getCompanies = gql`
       }
     }
   }`
-
-// const learnAboutCompanyType = gql`
-//   query learnAboutCompanyType {
-//     __type(name: "Company") {
-//       kind
-//       fields {
-//         name
-//         type {
-//           name
-//         }
-//       }
-//     }
-//   }
-// `
 
 const addCompany = gql`
   ${companyFields}
@@ -61,8 +58,6 @@ const addCompany = gql`
 
 export default compose(
   graphql(getCompanies, {props: ({ownProps, data}) => data}),
-  // graphql(getCompaniesForTable, {props: ({ownProps, data}) => data}),
-  // graphql(learnAboutCompanyType, {props: ({ownProps, data}) => data}),
-  graphql(addCompany, {name: 'addCompany'}),
+  graphql(addCompany, {name: 'addCompany', options: {refetchQueries: ['getCompanies']}}),
   renderWhileLoading('company'),
 )
