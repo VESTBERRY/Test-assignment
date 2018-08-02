@@ -1,0 +1,1 @@
+export {CompaniesBySize} from './CompaniesBySize'

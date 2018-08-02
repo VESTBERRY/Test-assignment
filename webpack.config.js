@@ -160,7 +160,7 @@ const config = {
       __TEST__,
       __PROD__,
     }),
-
+    new webpack.ContextReplacementPlugin(/\.\/locale$/, 'empty-module', false, /js$/),
     new webpack.HotModuleReplacementPlugin({
       multiStep: false
     }),

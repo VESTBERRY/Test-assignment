@@ -5,6 +5,7 @@ import {
   GraphQLList,
   GraphQLInt,
   GraphQLError,
+  // GraphQLFloat,
   // GraphQLScalarType,
 } from 'graphql'
 import casual from 'casual'
@@ -93,11 +94,18 @@ const CompanyType = new GraphQLObjectType({
         type: GraphQLInt,
         resolve: company => company.investmentSize,
       },
+      // forDonut: {
+      //   type: GraphQLFloat,
+      //   resolve: ({...all}) => {
+      //     console.log('all')
+      //     return 0.1
+      //   }
+      // }
     }
   }
 })
 
-const sectors = ['Fintech', 'IOT', 'Roboadvisory', 'Insuretech']
+const sectors = ['Fintech', 'IOT', 'Roboadvisory', 'Insuretech', 'With Space']
 const stages = ['Idea', 'Prototype', 'Seed', 'Series A', 'Series B', 'Series C']
 const companies = [...Array(Math.round(Math.random() * 3 + 4)).keys()]
   .map(() => ({

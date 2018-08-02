@@ -34,17 +34,18 @@ const FormItemFeedback = ({children, name}) => (
 )
 FormItemFeedback.propTypes = {
   name: PropTypes.string,
-  label: PropTypes.string,
   children: PropTypes.node,
 }
+
 const TextField = ({name, placeholder, label}) => (
   <FormikConsumer>
-    {({values, setFieldValue, setFieldTouched}) => (
+    {({values, setFieldValue, setFieldTouched, submitForm}) => (
       <FormItemFeedback name={name}>
         <div>{label}</div>
         <Input
           type="text"
           placeholder={placeholder}
+          onPressEnter={() => submitForm()}
           value={values[name]}
           onBlur={() => setFieldTouched(name)}
           onChange={event => setFieldValue(name, event.target.value)}
@@ -58,9 +59,10 @@ TextField.propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
 }
+
 const MoneyField = ({name, placeholder, currency, label}) => (
   <FormikConsumer>
-    {({values, setFieldValue, setFieldTouched}) => (
+    {({values, setFieldValue, setFieldTouched, submitForm}) => (
       <FormItemFeedback name={name}>
         <div>{label}</div>
         <Input
@@ -68,9 +70,14 @@ const MoneyField = ({name, placeholder, currency, label}) => (
           style={{
             width: '100%',
           }}
+          onPressEnter={() => submitForm()}
           placeholder={placeholder}
           onBlur={() => setFieldTouched(name)}
-          onChange={event => setFieldValue(name, event.target.value)}
+          onChange={event => {
+            const {value} = event.target
+            // TODO test for currency
+            setFieldValue(name, value)
+          }}
           addonAfter={currency}
         />
       </FormItemFeedback>
@@ -83,6 +90,7 @@ MoneyField.propTypes = {
   placeholder: PropTypes.string,
   currency: PropTypes.string,
 }
+
 const SelectField = ({name, selectOptions, defaultOption, label}) => (
   <FormikConsumer>
     {({values, setFieldValue, setFieldTouched}) => (
@@ -119,6 +127,7 @@ const transformMutationErrorToFormikErrors = mutationError => {
  * that so we can create form from schema, handle validations, within schema
  *
  * TODO Pass around nice graphql errors after mutation
+ * TODO test currency
  */
 const AddCompanyFormRenderer = ({stage, sector, companyTypeForm, addCompany, onSubmitSuccess}) => (
   <Formik

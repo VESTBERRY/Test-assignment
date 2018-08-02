@@ -22,7 +22,7 @@ SectionContent.defaultProps = {
 
 const styl = {
   root: css`
-    border: 1px solid red;
-    padding: 5px;
+    // border: 1px solid red;
+    // padding: 5px;
   `,
 }

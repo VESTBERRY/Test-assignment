@@ -22,7 +22,9 @@ SectionHeader.defaultProps = {
 
 const styl = {
   root: css`
-    border: 1px solid blue;
+    // border: 1px solid blue;
+    background-color: #f7f9fc;
     padding: 5px;
+    width: 100%;
   `,
 }

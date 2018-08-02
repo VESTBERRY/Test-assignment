@@ -22,7 +22,7 @@ SectionFooter.defaultProps = {
 
 const styl = {
   root: css`
-    border: 1px solid purple;
+    // border: 1px solid purple;
     padding: 5px;
   `,
 }

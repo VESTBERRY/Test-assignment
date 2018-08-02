@@ -1,17 +1,18 @@
 import React from 'react'
 import {css, cx} from 'react-emotion'
+import {Icon} from 'antd'
 
 export const LoadingPlaceholder = () => (
   <div className={cx(styl.root)}>
-    LoadingPlaceholder...
+    <Icon type="loading" />
   </div>
 )
 
 const styl = {
   root: css`
     display: block;
-    width: 1000px;
+    text-align: center;
     height: 200px;
-    background-color: red;
+    // background-color: red;
   `,
 }

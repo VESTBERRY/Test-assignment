@@ -5,6 +5,7 @@ import {LoadingPlaceholder} from '../atoms/loading-placeholder'
 export const renderWhileLoading = (propName = 'data', component = LoadingPlaceholder) =>
   branch(
     props => {
+      // return true
       return props.loading
       // return props[propName] && props[propName].loading
     },

@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 import {graphql, compose} from 'react-apollo'
+import {graphqlLodash} from 'graphql-lodash'
 import {renderWhileLoading} from '../utils'
 
 const companyFields = gql`
@@ -38,6 +39,9 @@ const getCompanies = gql`
         }
       }
     }
+    companiesGroupedBySector: company @_(groupBy: "sector") {
+      ...companyFields
+    }
     companiesColumnsForTable: __type(name: "Company") {
       fields {
         title: name
@@ -46,6 +50,12 @@ const getCompanies = gql`
       }
     }
   }`
+
+// groupBySector: companies {
+//   groupBySector: @_(groupBy: "sector") {
+//     sector
+//   }
+// }
 
 const addCompany = gql`
   ${companyFields}
@@ -56,8 +66,24 @@ const addCompany = gql`
     }
   }`
 
+// const {query: getCompaniesLodash, transform} = graphqlLodash(getCompanies)
+
+export function gqlLodash (rawQuery, config) {
+  const {query, transform} = graphqlLodash(rawQuery)
+  let origProps = (config && config.props) || ((props) => props)
+
+  return (comp) => graphql(query, {...config,
+    props: (props) => origProps({
+      ...props,
+      rawData: props.data,
+      data: transform(props.data)
+    })
+  })(comp)
+}
+
 export default compose(
-  graphql(getCompanies, {props: ({ownProps, data}) => data}),
+  // graphql(getCompanies, {props: ({ownProps, data}) => data}),
+  gqlLodash(getCompanies, {props: ({ownProps, data}) => data}),
   graphql(addCompany, {name: 'addCompany', options: {refetchQueries: ['getCompanies']}}),
   renderWhileLoading('company'),
 )
