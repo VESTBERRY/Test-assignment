@@ -24,6 +24,7 @@
         "antd": "^3.7.3",
         "apollo-client": "^2.3.7",
         "apollo-client-preset": "^1.0.8",
+        "chart.js": "^2.7.2",
         "dataloader": "^1.4.0",
         "emotion": "^9.2.6",
         "empty-module": "^0.0.2",
@@ -39,12 +40,14 @@
         "prop-types": "^15.6.2",
         "react": "^16.4.1",
         "react-apollo": "^2.1.9",
+        "react-chartjs-2": "^2.7.4",
         "react-css-modules": "^4.7.4",
         "react-d3-basic": "^1.6.11",
         "react-dom": "^16.4.1",
         "react-emotion": "^9.2.6",
         "react-modal": "^3.5.1",
         "recompose": "^0.28.0",
+        "tinycolor2": "^1.4.1",
         "yup": "^0.26.0"
     },
     "devDependencies": {

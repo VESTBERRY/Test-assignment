@@ -22,7 +22,7 @@ class CompaniesBySectorRenderer extends React.Component {
             }}>
               <Row gutter={16}>
                 {Object.entries(companiesGroupedBySector).map(([sector, companies]) => (
-                  <Col span={4}>
+                  <Col key={sector} span={4}>
                     <Card
                       title={sector}
                     >

@@ -94,6 +94,10 @@ const CompanyType = new GraphQLObjectType({
         type: GraphQLInt,
         resolve: company => company.investmentSize,
       },
+      color: {
+        type: GraphQLString,
+        resolve: company => company.color,
+      }
       // forDonut: {
       //   type: GraphQLFloat,
       //   resolve: ({...all}) => {
@@ -113,7 +117,8 @@ const companies = [...Array(Math.round(Math.random() * 3 + 4)).keys()]
     name: casual.company_name,
     stage: casual.random_element(stages),
     sector: casual.random_element(sectors),
-    investmentSize: Math.round(Math.random() * 10000000)
+    investmentSize: Math.round(Math.random() * 10000000),
+    color: casual.rgb_hex
   }))
 
 const companyQuery = {
@@ -186,6 +191,7 @@ const addCompany = (_, input, context) => {
 
   const company = {
     id: casual.random,
+    color: casual.rgb_hex,
     ...input
   }
 

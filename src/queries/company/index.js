@@ -10,6 +10,7 @@ const companyFields = gql`
     stage
     sector
     investmentSize
+    color
   }
 `
 
