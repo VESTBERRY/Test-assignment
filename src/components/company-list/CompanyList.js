@@ -1,12 +1,14 @@
 import React from 'react'
+import {compose} from 'recompose'
 import PropTypes from 'prop-types'
+import {css, cx} from 'react-emotion'
 import {Table, Modal, Button, Row, Col} from 'antd'
 
-import companyQueries from '../../queries/company'
-import {Section, SectionHeader, SectionContent, SectionFooter} from '../../atoms/section'
+import {getColumnsForCompaniesTableQuery, getCompaniesQuery} from '../../queries/company'
+import {Section, SectionContent, SectionFooter} from '../../atoms/section'
 import {AddCompanyForm} from '../add-company-form'
 
-class CompanyListRenderer extends React.Component {
+class Renderer extends React.Component {
   state = {
     isModalOpen: false,
   }
@@ -15,34 +17,34 @@ class CompanyListRenderer extends React.Component {
   closeModal = () => this.setState({isModalOpen: false})
 
   render () {
-    const {companiesForTable, companiesColumnsForTable} = this.props
+    const {companies, columnsForCompaniesTable} = this.props
     const {isModalOpen} = this.state
-
-    console.log('propz', this.props)
 
     return (
       <React.Fragment>
         <Modal
           visible={isModalOpen}
-          onOk={() => {
-            this.closeModal()
-          }}
+          onOk={this.closeModal}
+          width="80vw"
           footer={null}
-          onCancel={() => this.closeModal()}
+          onCancel={this.closeModal}
         >
-          <AddCompanyForm onSubmitSuccess={this.closeModal} />
+          <Row>
+            <Col span="6" />
+            <Col span="12">
+              <AddCompanyForm onSubmitSuccess={this.closeModal} />
+            </Col>
+            <Col span="6" />
+          </Row>
         </Modal>
 
         <Section>
-          {/* <SectionHeader>
-            Header
-          </SectionHeader> */}
-          <SectionContent>
+          <SectionContent className={cx(styl.tableWrapper)}>
             <Table
-              // className={}
               pagination={false}
-              dataSource={companiesForTable}
-              columns={companiesColumnsForTable.fields}
+              dataSource={companies.data}
+              rowClassName={cx(styl.rowStyle)}
+              columns={columnsForCompaniesTable.data.fields}
             />
           </SectionContent>
           <SectionFooter>
@@ -51,7 +53,7 @@ class CompanyListRenderer extends React.Component {
               padding: '10px'
             }}>
               <Button type="normal" size="large" onClick={this.openModal}>
-                Add Company
+                Add new company
               </Button>
             </div>
           </SectionFooter>
@@ -61,17 +63,42 @@ class CompanyListRenderer extends React.Component {
   }
 }
 
-CompanyListRenderer.propTypes = {
-  // companies: PropTypes.array,
-  companiesForTable: PropTypes.array,
-  // companiesColumnsForTable: PropTypes.array,
-  companiesColumnsForTable: PropTypes.object,
+Renderer.propTypes = {
+  companies: PropTypes.object,
+  columnsForCompaniesTable: PropTypes.object,
 }
 
-CompanyListRenderer.defaultProps = {
-  companies: [],
-  companiesForTable: [],
-  companiesColumnsForTable: [],
-}
+export const CompanyList = compose(
+  getCompaniesQuery,
+  getColumnsForCompaniesTableQuery,
+)(Renderer)
 
-export const CompanyList = companyQueries(CompanyListRenderer)
+const styl = {
+  root: css`
+  `,
+  tableWrapper: css`
+    .ant-table-thead {
+      tr {
+        th {
+          background-color: #f7f9fc;
+          text-transform: uppercase;
+          color: #0d7380;
+          font-size: 1.17em;
+        }
+      }
+    }
+    .ant-table-tbody {
+      tr {
+        td {
+          color: #394c52;
+        }
+      }
+    }
+  `,
+  rowStyle: css`
+    padding-left:5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+  `
+}

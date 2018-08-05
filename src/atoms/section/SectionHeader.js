@@ -22,9 +22,15 @@ SectionHeader.defaultProps = {
 
 const styl = {
   root: css`
-    // border: 1px solid blue;
-    background-color: #f7f9fc;
-    padding: 5px;
+    padding: 15px;
     width: 100%;
+    background-color: #f7f9fc;
+    text-transform: uppercase;
+    color: #0d7380;
+
+    h3 {
+      color: inherit;
+      margin-bottom: 0;
+    }
   `,
 }

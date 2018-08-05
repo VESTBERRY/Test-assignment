@@ -1,16 +1,20 @@
 import gql from 'graphql-tag'
-import {graphql, compose} from 'react-apollo'
-import {renderWhileLoading} from '../utils'
+import {graphqlWithLoading} from '../utils'
 
-const getStages = gql`
-    query getStages {
-      stage
+export const fragments = gql`
+  fragment stageFragment on Stage {
+    id
+    name
+    color
+  }
+`
+
+export const getStages = gql`
+  ${fragments}
+  query getStages {
+    data: stage {
+      ...stageFragment
     }
-  `
+  }`
 
-export default compose(
-  graphql(getStages, {
-    props: ({ownProps, data}) => data,
-  }),
-  renderWhileLoading('stage'),
-)
+export const getStagesQuery = graphqlWithLoading(getStages, 'stages')

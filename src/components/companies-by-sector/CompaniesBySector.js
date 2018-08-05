@@ -1,14 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Row, Col, Card} from 'antd'
+import {compose} from 'recompose'
+import {css, cx} from 'react-emotion'
+import {Row, Col} from 'antd'
 
-import companyQueries from '../../queries/company'
-import {Section, SectionHeader, SectionContent, SectionFooter} from '../../atoms/section'
+import {getSectorsWithCompaniesQuery} from '../../queries/sector'
+import {Section, SectionHeader, SectionContent} from '../../atoms/section'
 
-class CompaniesBySectorRenderer extends React.Component {
+class Renderer extends React.Component {
   render () {
-    const {companiesGroupedBySector} = this.props
-    console.log('propz', this.props)
+    const {sectorsWithCompanies} = this.props
 
     return (
       <React.Fragment>
@@ -20,30 +21,46 @@ class CompaniesBySectorRenderer extends React.Component {
             <div style={{
               padding: '20px'
             }}>
-              <Row gutter={16}>
-                {Object.entries(companiesGroupedBySector).map(([sector, companies]) => (
-                  <Col key={sector} span={4}>
-                    <Card
-                      title={sector}
-                    >
-                      <p>Number of companies {companies.length}</p>
-                    </Card>
+              <Row>
+                {sectorsWithCompanies.data.map(({id, name, companies}) => (
+                  <Col key={id} span={6} className={cx(styl.sectorTile)}>
+                    <h2 className={styl.sectorCompanyCount}>{companies.length}</h2>
+                    <h3 className={styl.sectorTitle}>{name}</h3>
                   </Col>
                 ))}
               </Row>
             </div>
           </SectionContent>
-          <SectionFooter>
-            Footer
-          </SectionFooter>
         </Section>
       </React.Fragment>
     )
   }
 }
 
-CompaniesBySectorRenderer.propTypes = {
-  companiesGroupedBySector: PropTypes.object,
+Renderer.propTypes = {
+  sectorsWithCompanies: PropTypes.object,
 }
 
-export const CompaniesBySector = companyQueries(CompaniesBySectorRenderer)
+export const CompaniesBySector = compose(
+  getSectorsWithCompaniesQuery
+)(Renderer)
+
+const styl = {
+  sectorTile: css`
+    border-right: 1px solid black;
+    padding: 5px;
+    text-align: center;
+
+    &:last-child {
+      border-right: 0;
+    }
+  `,
+  sectorTitle: css`
+    text-transform: uppercase;
+    color: #0d7380;
+    font-size: 1.5em;
+  `,
+  sectorCompanyCount: css`
+    font-size: 1.7em;
+  `
+}

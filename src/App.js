@@ -3,41 +3,37 @@ import {ApolloProvider} from 'react-apollo'
 import {TestAssignmentPage} from './pages/test-assignment-page'
 import {Layout} from 'antd'
 import client from './apollo'
-// import styles from 'App.scss'
+import {css, cx} from 'react-emotion'
 
 const App = () =>
-  <Layout style={{
-    backgroundColor: '#ebeef7',
-    minHeight: '100vh'
-  }}>
-    <Layout.Header style={{
-      textAlign: 'center'
-    }}>
-      <h3 style={{
-        color: 'white'
-      }}>
+  <Layout className={cx(styl.layout)}>
+    <Layout.Header className={cx(styl.header)}>
+      <h3 className={cx(styl.headerTitle)}>
         VESTBERRY TEST ASSIGNMENT
       </h3>
     </Layout.Header>
-    <Layout.Content style={{
-      padding: '50px',
-      backgroundColor: '#ebeef7'
-    }}>
+    <Layout.Content className={cx(styl.content)}>
       <ApolloProvider client={client}>
         <TestAssignmentPage />
       </ApolloProvider>
     </Layout.Content>
   </Layout>
 
-  // <div className={styles.main}>
-  //   <div className={styles.header}>
-  //     VESTBERRY TEST ASSIGNMENT
-  //   </div>
-  //   <div className={styles.content}>
-  //     <ApolloProvider client={client}>
-  //       <TestAssignmentPage />
-  //     </ApolloProvider>
-  //   </div>
-  // </div>
-
 export default App
+
+const styl = {
+  layout: css`
+    background-color: #ebeef7;
+    min-height: 100vh;
+  `,
+  header: css`
+    text-align: center;
+  `,
+  headerTitle: css`
+    color: white;
+  `,
+  content: css`
+    padding: 25px 50px;
+    background-color: #ebeef7;
+  `
+}

@@ -23,9 +23,13 @@ Section.defaultProps = {
 const styl = {
   root: css`
     // border: 1px solid black;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     background-color: white;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+
+    &:first-child {
+      margin-top: 10px;
+    }
   `,
 }

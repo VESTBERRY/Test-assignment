@@ -1,49 +1,39 @@
-import gql from 'graphql-tag'
-import {graphql, compose} from 'react-apollo'
-import {graphqlLodash} from 'graphql-lodash'
-import {renderWhileLoading} from '../utils'
+/* eslint-disable max-len */
 
-const companyFields = gql`
-  fragment companyFields on Company {
+import gql from 'graphql-tag'
+import {graphqlWithLoading} from '../utils'
+
+export const companyFragment = gql`
+  fragment companyFragment on Company {
     id
     name
-    stage
-    sector
     investmentSize
     color
-  }
-`
-
-// const directives = gql`
-//   directive @formType(type: String): on TYPE
-// `
-
-/**
- * @FIXME How to omit id from fields?
- */
-const getCompanies = gql`
-  ${companyFields}
-
-  query getCompanies {
-    companies: company {
-      ...companyFields
+    stage {
+      id
+      name
     }
-    companiesForTable: company {
-      ...companyFields
-      key: id
+    sector {
+      id
+      name
     }
-    companyTypeForm: __type(name: "CompanyTypeForm") {
-      fields {
+  }`
+
+export const getCompaniesForTable = gql`
+    query getCompaniesForTable {
+      data: company {
+        key: id
         name
-        type {
-          name
-        }
+        sector_name
+        stage_name
+        formatInvestmentSize
       }
     }
-    companiesGroupedBySector: company @_(groupBy: "sector") {
-      ...companyFields
-    }
-    companiesColumnsForTable: __type(name: "Company") {
+  `
+
+export const getColumnsForCompaniesTable = gql`
+  query getColumnsForCompaniesTable {
+    data: __type(name: "DisplayableColumnsForCompaniesTable") {
       fields {
         title: name
         dataIndex: name
@@ -52,39 +42,29 @@ const getCompanies = gql`
     }
   }`
 
-// groupBySector: companies {
-//   groupBySector: @_(groupBy: "sector") {
-//     sector
-//   }
-// }
-
-const addCompany = gql`
-  ${companyFields}
-
-  mutation ($name: String!, $stage: String!, $sector: String!, $investmentSize: Int!) {
-    addCompany(name: $name, stage: $stage, sector: $sector, investmentSize: $investmentSize) {
-      ...companyFields
+export const getCompanies = gql`
+  ${companyFragment}
+  query getCompanies {
+    data: company {
+      ...companyFragment
+      id
+      key: id
+      name
+      sector_name
+      stage_name
+      formatInvestmentSize
     }
   }`
 
-// const {query: getCompaniesLodash, transform} = graphqlLodash(getCompanies)
+export const addCompany = gql`
+  ${companyFragment}
+  mutation ($name: String!, $stage: String!, $sector: String!, $investmentSize: Int!) {
+    addCompany(name: $name, stage: $stage, sector: $sector, investmentSize: $investmentSize) {
+      ...companyFragment
+    }
+  }`
 
-export function gqlLodash (rawQuery, config) {
-  const {query, transform} = graphqlLodash(rawQuery)
-  let origProps = (config && config.props) || ((props) => props)
-
-  return (comp) => graphql(query, {...config,
-    props: (props) => origProps({
-      ...props,
-      rawData: props.data,
-      data: transform(props.data)
-    })
-  })(comp)
-}
-
-export default compose(
-  // graphql(getCompanies, {props: ({ownProps, data}) => data}),
-  gqlLodash(getCompanies, {props: ({ownProps, data}) => data}),
-  graphql(addCompany, {name: 'addCompany', options: {refetchQueries: ['getCompanies']}}),
-  renderWhileLoading('company'),
-)
+export const getCompaniesQuery = graphqlWithLoading(getCompanies, 'companies')
+export const getCompaniesForTableQuery = graphqlWithLoading(getCompaniesForTable, 'companiesForTable')
+export const getColumnsForCompaniesTableQuery = graphqlWithLoading(getColumnsForCompaniesTable, 'columnsForCompaniesTable')
+export const addCompanyMutation = graphqlWithLoading(addCompany, 'addCompany', {refetchQueries: ['getCompanies', 'getSectorsWithCompanies']})

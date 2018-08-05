@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 import {
   GraphQLSchema,
   GraphQLObjectType,
@@ -5,10 +7,10 @@ import {
   GraphQLList,
   GraphQLInt,
   GraphQLError,
-  // GraphQLFloat,
-  // GraphQLScalarType,
 } from 'graphql'
 import casual from 'casual'
+
+// const asyncDelay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 class ValidationError extends GraphQLError {
   constructor (errors) {
@@ -25,92 +27,133 @@ class ValidationError extends GraphQLError {
   }
 }
 
-// const FormInputText = new GraphQLScalarType({
-//   name: 'text',
-//   serialize: () => {},
-//   parseValue: () => {},
-//   parseLiteral: () => {},
-// })
+const SectorType = new GraphQLObjectType({
+  name: 'Sector',
+  description: '...',
+  fields: () => ({
+    id: {
+      type: GraphQLString,
+      resolve: s => s.id,
+    },
+    name: {
+      type: GraphQLString,
+      resolve: s => s.name,
+    },
+    color: {
+      type: GraphQLString,
+      resolve: s => s.color
+    },
+    companies: {
+      type: GraphQLList(CompanyType),
+      resolve: s => companies.filter(company => company.sector.id === s.id)
+    }
+  })
+})
 
-// const FormInputNumber = new GraphQLScalarType({
-//   name: 'number',
-//   serialize: () => {},
-//   parseValue: () => {},
-//   parseLiteral: () => {},
-// })
+// @todo split formatters from base type
+const StageType = new GraphQLObjectType({
+  name: 'Stage',
+  description: '...',
+  fields: () => ({
+    id: {
+      type: GraphQLString,
+      resolve: s => s.id,
+    },
+    name: {
+      type: GraphQLString,
+      resolve: s => s.name,
+    },
+    color: {
+      type: GraphQLString,
+      resolve: s => s.color
+    },
+    companies: {
+      type: new GraphQLList(CompanyType),
+      resolve: s => companies.filter(company => company.stage.id === s.id)
+    },
+  })
+})
 
-// const FormInputSelect = new GraphQLScalarType({
-//   name: 'select',
-//   serialize: () => {},
-//   parseValue: () => {},
-//   parseLiteral: () => {},
-// })
+const companyFields = {
+  id: {
+    type: GraphQLString,
+    resolve: c => c.id,
+  },
+  name: {
+    type: GraphQLString,
+    resolve: c => c.name,
+    // resolve: async (c) => {
+    //   await asyncDelay(4000)
+    //   return c.name
+    // }
+  },
+  stage: {
+    type: StageType,
+    resolve: c => c.stage,
+  },
+  stage_id: {
+    type: GraphQLString,
+    resolve: c => c.stage.id
+  },
+  stage_name: {
+    type: GraphQLString,
+    resolve: c => c.stage.name
+  },
+  sector: {
+    type: SectorType,
+    resolve: c => c.sector,
+  },
+  sector_id: {
+    type: GraphQLString,
+    resolve: c => c.sector.id,
+  },
+  sector_name: {
+    type: GraphQLString,
+    resolve: c => c.sector.name,
+  },
+  investmentSize: {
+    type: GraphQLInt,
+    resolve: c => c.investmentSize,
+  },
+  formatInvestmentSize: {
+    type: GraphQLString,
+    resolve: c => `${c.investmentSize} EUR`
+  },
+  color: {
+    type: GraphQLString,
+    resolve: c => c.color,
+  }
+}
 
-// const CompanyTypeForm = new GraphQLObjectType({
-//   name: 'CompanyTypeForm',
-//   description: '...',
-//   fields: () => ({
-//     name: {
-//       type: FormInputText,
-//       resolve: () => {}
-//     },
-//     stage: {
-//       type: FormInputSelect,
-//       resolve: () => {}
-//     },
-//     sector: {
-//       type: FormInputSelect,
-//       resolve: () => {}
-//     },
-//     investmentSize: {
-//       type: FormInputNumber,
-//       resolve: () => {}
-//     }
-//   })
-// })
+const DisplayableColumnsForCompaniesTable = new GraphQLObjectType({
+  name: 'DisplayableColumnsForCompaniesTable',
+  description: '...',
+  fields: () => {
+    const {id, sector, color, stage, stage_id, sector_id, investmentSize, ...whitelist} = companyFields
 
+    return whitelist
+  }
+})
 const CompanyType = new GraphQLObjectType({
   name: 'Company',
   description: '...',
-  fields: () => {
-    return {
-      id: {
-        type: GraphQLString,
-        resolve: company => company.id,
-      },
-      name: {
-        type: GraphQLString,
-        resolve: company => company.name,
-      },
-      stage: {
-        type: GraphQLString,
-        resolve: company => company.stage,
-      },
-      sector: {
-        type: GraphQLString,
-        resolve: company => company.sector,
-      },
-      investmentSize: {
-        type: GraphQLInt,
-        resolve: company => company.investmentSize,
-      },
-      color: {
-        type: GraphQLString,
-        resolve: company => company.color,
-      }
-      // forDonut: {
-      //   type: GraphQLFloat,
-      //   resolve: ({...all}) => {
-      //     console.log('all')
-      //     return 0.1
-      //   }
-      // }
-    }
-  }
+  fields: () => companyFields,
 })
 
-const sectors = ['Fintech', 'IOT', 'Roboadvisory', 'Insuretech', 'With Space']
-const stages = ['Idea', 'Prototype', 'Seed', 'Series A', 'Series B', 'Series C']
+const sectorList = ['Fintech', 'IOT', 'Roboadvisory', 'Insuretech']
+const sectors = sectorList.map(sectorListItem => ({
+  id: casual.random,
+  name: sectorListItem,
+  color: casual.rgb_hex,
+}))
+
+const stageList = ['Idea', 'Prototype', 'Seed', 'Series A', 'Series B', 'Series C']
+const stages = stageList.map(stageListItem => ({
+  id: casual.random,
+  name: stageListItem,
+  color: casual.rgb_hex,
+}))
+
 const companies = [...Array(Math.round(Math.random() * 3 + 4)).keys()]
   .map(() => ({
     id: casual.random,
@@ -118,7 +161,7 @@ const companies = [...Array(Math.round(Math.random() * 3 + 4)).keys()]
     stage: casual.random_element(stages),
     sector: casual.random_element(sectors),
     investmentSize: Math.round(Math.random() * 10000000),
-    color: casual.rgb_hex
+    color: casual.rgb_hex,
   }))
 
 const companyQuery = {
@@ -128,13 +171,13 @@ const companyQuery = {
 }
 
 const sectorQuery = {
-  type: GraphQLList(GraphQLString),
+  type: GraphQLList(SectorType),
   resolve: (root, args, {session, ...data}, d) =>
     sectors
 }
 
 const stageQuery = {
-  type: GraphQLList(GraphQLString),
+  type: GraphQLList(StageType),
   resolve: (root, args, {session, ...data}, d) =>
     stages
 }
@@ -145,44 +188,43 @@ const query = new GraphQLObjectType({
   fields: {
     company: companyQuery,
     sector: sectorQuery,
-    stage: stageQuery
+    stage: stageQuery,
   }
 })
 
 const addCompany = (_, input, context) => {
   const errors = []
 
+  if (companies.find(c => c.name === input.name)) {
+    errors.push({
+      key: 'name',
+      message: 'Company with such name already exists'
+    })
+  }
+
   if (input.name.length <= 2) {
     errors.push({
       key: 'name',
       message: 'Company name has to be longer then 2 characters'
     })
-    // errors.push(new GraphQLError('Company name has to be longer then 2 characters'))
-    // throw new GraphQLError('Company name has to be longer then 2 characters')
   }
-  if (stages.indexOf(input.stage) === -1) {
+  if (!stages.find(s => s.name === input.stage)) {
     errors.push({
       key: 'stage',
       message: 'Company stage must be in the list'
     })
-    // errors.push(new GraphQLError('Company stage must be in the list'))
-    // throw new GraphQLError('Company stage must be in the list')
   }
-  if (sectors.indexOf(input.sector) === -1) {
+  if (!sectors.find(s => s.name === input.sector)) {
     errors.push({
       key: 'sector',
       message: 'Company sector must be in the list'
     })
-    // errors.push(new GraphQLError('Company sector must be in the list'))
-    // throw new GraphQLError('Company sector must be in the list')
   }
   if (input.investmentSize < 0) {
     errors.push({
       key: 'investmentSize',
       message: 'Investment size has to be positive number'
     })
-    // errors.push(new GraphQLError('Investment size has to be positive number'))
-    // throw new GraphQLError('Investment size has to be positive number')
   }
 
   if (errors.length > 0) {
@@ -190,9 +232,11 @@ const addCompany = (_, input, context) => {
   }
 
   const company = {
+    ...input,
     id: casual.random,
     color: casual.rgb_hex,
-    ...input
+    sector: sectors.find(s => s.name === input.sector),
+    stage: stages.find(s => s.name === input.stage),
   }
 
   companies.push(company)
@@ -230,6 +274,7 @@ const mutation = new GraphQLObjectType({
 })
 
 const schema = new GraphQLSchema({
+  types: [CompanyType, SectorType, StageType, DisplayableColumnsForCompaniesTable],
   query,
   mutation,
 })

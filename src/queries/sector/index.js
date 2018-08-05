@@ -1,16 +1,32 @@
 import gql from 'graphql-tag'
-import {graphql, compose} from 'react-apollo'
-import {renderWhileLoading} from '../utils'
+import {graphqlWithLoading} from '../utils'
 
-const getSectors = gql`
-    query getSectors {
-      sector
+export const fragments = gql`
+  fragment sectorFragment on Sector {
+    id
+    name
+    color
+  }
+`
+
+export const getSectors = gql`
+  ${fragments}
+  query getSectors {
+    data: sector {
+      ...sectorFragment
     }
-  `
+  }`
 
-export default compose(
-  graphql(getSectors, {
-    props: ({ownProps, data}) => data,
-  }),
-  renderWhileLoading('sector'),
-)
+export const getSectorsWithCompanies = gql`
+  ${fragments}
+  query getSectorsWithCompanies {
+    data: sector {
+      ...sectorFragment
+      companies {
+        id
+      }
+    }
+  }`
+
+export const getSectorsQuery = graphqlWithLoading(getSectors, 'sectors')
+export const getSectorsWithCompaniesQuery = graphqlWithLoading(getSectorsWithCompanies, 'sectorsWithCompanies')

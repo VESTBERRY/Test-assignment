@@ -1,7 +1,7 @@
 import express from 'express'
 import compress from 'compression'
 import graphqlHTTP from 'express-graphql'
-import schema from 'schema'
+import schema from './schema'
 
 const app = express()
 
