@@ -12,13 +12,13 @@ You can start with the prepared project we have created and with our backend.
 
 * Try to get the template visual as close as possible to the design created in PSD, available also in Figma: (TODO: link)
 
-* Make it possible to add ia new company to the table (with its name, stage, sector and investment size)
+* Make it possible to add a new company to the table (with its name, stage, sector and investment size)
 
-* Adding new a company, should also be reflected in the list of „companies by investment size pie chart“, and „companies by sectors statistics“
+* Adding new a company should also be reflected in the list of „companies by investment size pie chart“, and „companies by sectors statistics“
 
-* Adding new company should be done using a simple modal box (design included in PSD or Figma)
+* Adding a new company should be done using a simple modal box (design included in PSD or Figma)
 
-* Feel free to use any additional library you might need for completing this project, or to change structure or anything
+* Feel free to use any additional library you might need for completing this project, or to change the structure or anything
 
 * We would like to see, how will you solve this task in terms of result precision, code quality & readability
 
