@@ -8,5 +8,5 @@ module.exports = {
     discardUnused: false,
     mergeIdents: false,
     reduceIdents: false,
-  }
+  },
 }

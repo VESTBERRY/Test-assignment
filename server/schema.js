@@ -1,12 +1,13 @@
-import {
+const {
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLString,
   GraphQLList,
   GraphQLInt,
-  GraphQLError
-} from 'graphql'
-import casual from 'casual'
+  GraphQLID,
+  GraphQLError,
+} = require('graphql')
+const casual = require('casual')
 
 const CompanyType = new GraphQLObjectType({
   name: 'Company',
@@ -14,6 +15,10 @@ const CompanyType = new GraphQLObjectType({
 
   fields: () => {
     return {
+      id: {
+        type: GraphQLID,
+        resolve: company => company.id,
+      },
       name: {
         type: GraphQLString,
         resolve: company => company.name,
@@ -31,45 +36,46 @@ const CompanyType = new GraphQLObjectType({
         resolve: company => company.investmentSize,
       },
     }
-  }
+  },
 })
 
 const sectors = ['Fintech', 'IOT', 'Roboadvisory', 'Insuretech']
 const stages = ['Idea', 'Prototype', 'Seed', 'Series A', 'Series B', 'Series C']
 const companies = [...Array(Math.round(Math.random() * 3 + 1)).keys()]
-  .map(() => ({
+  .map((_, id) => ({
+    id,
     name: casual.company_name,
     stage: casual.random_element(stages),
     sector: casual.random_element(sectors),
-    investmentSize: Math.round(Math.random() * 10000000)
+    investmentSize: Math.round(Math.random() * 10000000),
   }))
 
-const companyQuery = {
+const companiesQuery = {
   type: GraphQLList(CompanyType),
   resolve: (root, args, {session, ...data}, d) =>
-    companies
+    companies,
 }
 
-const sectorQuery = {
+const sectorsQuery = {
   type: GraphQLList(GraphQLString),
   resolve: (root, args, {session, ...data}, d) =>
-    sectors
+    sectors,
 }
 
-const stageQuery = {
+const stagesQuery = {
   type: GraphQLList(GraphQLString),
   resolve: (root, args, {session, ...data}, d) =>
-    stages
+    stages,
 }
 
 const query = new GraphQLObjectType({
   name: 'Query',
   description: '...',
   fields: {
-    company: companyQuery,
-    sector: sectorQuery,
-    stage: stageQuery
-  }
+    companies: companiesQuery,
+    sectors: sectorsQuery,
+    stages: stagesQuery,
+  },
 })
 
 const addCompany = (obj, company) => {
@@ -85,7 +91,10 @@ const addCompany = (obj, company) => {
   if (company.investmentSize < 0) {
     throw new GraphQLError('Investment size has to be positive number')
   }
-  companies.push(company)
+  companies.push({
+    id: companies.length,
+    company,
+  })
   return company
 }
 
@@ -114,13 +123,13 @@ const mutation = new GraphQLObjectType({
         },
       },
       resolve: addCompany,
-    }
+    },
   },
 })
 
 const schema = new GraphQLSchema({
   query,
-  mutation
+  mutation,
 })
 
-export default schema
+module.exports = schema

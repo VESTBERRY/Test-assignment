@@ -1,26 +1,31 @@
 {
     "presets": [
         [
-            "env",
+            "@babel/preset-env",
             {
+                "useBuiltIns": "usage",
+                "corejs": 3,
                 "targets": {
                     "browsers": "> 1%"
-                },
-                "include": [
-                    "transform-es2015-destructuring",
-                    "transform-es2015-parameters"
-                ]
+                }
             }
-        ], "react"
+        ],
+        "@babel/react"
     ],
     "plugins": [
-        "syntax-dynamic-import",
-        "syntax-object-rest-spread",
-        "transform-class-properties", [
-            "module-resolver", {
-                "root": ["./src", "./server"]
+        "@babel/plugin-proposal-numeric-separator",
+        "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-proposal-private-methods",
+        "@babel/plugin-proposal-optional-chaining",
+        "@babel/plugin-proposal-nullish-coalescing-operator",
+        [
+            "@babel/plugin-proposal-decorators",
+            {
+                "decoratorsBeforeExport": true
             }
-        ]
+        ],
+        "@babel/plugin-transform-runtime"
     ],
     "env": {
         "test": {

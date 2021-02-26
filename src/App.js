@@ -1,5 +1,5 @@
 import React from 'react'
-import {ApolloProvider} from 'react-apollo'
+import {ApolloProvider} from '@apollo/client'
 import Page from './Page'
 import client from './apollo'
 import styles from 'App.scss'

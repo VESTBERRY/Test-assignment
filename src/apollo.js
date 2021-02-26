@@ -1,7 +1,4 @@
-import {ApolloClient} from 'apollo-client'
-import {InMemoryCache} from 'apollo-cache-inmemory'
-import {HttpLink} from 'apollo-link-http'
-import {ApolloLink} from 'apollo-link'
+import {ApolloClient, ApolloLink, HttpLink, InMemoryCache} from '@apollo/client'
 
 const uri = `${window.location.origin}/${'graphql'}`
 
@@ -13,7 +10,7 @@ const link = ApolloLink.from([httpLink])
 
 const client = new ApolloClient({
   link,
-  cache
+  cache,
 })
 
 export default client

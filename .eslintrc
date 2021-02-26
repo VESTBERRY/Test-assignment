@@ -1,12 +1,14 @@
 {
-    "parser": "babel-eslint",
+    "parser": "@babel/eslint-parser",
     "extends": [
         "standard",
+        "standard-jsx",
         "standard-react"
     ],
     "plugins": [
         "babel",
         "react",
+        "react-hooks",
         "promise"
     ],
     "env": {
@@ -23,7 +25,12 @@
         "jsx-quotes": [2, "prefer-double"],
         "max-len": [2, 120, 2],
         "object-curly-spacing": [2, "never"],
-        "semi": [2, "never"],
-        "comma-dangle": "off"
+        "comma-dangle": [1, {
+            "arrays": "always-multiline",
+            "objects": "always-multiline",
+            "imports": "always-multiline",
+            "exports": "always-multiline",
+            "functions": "ignore"
+        }]
     }
 }
