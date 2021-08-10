@@ -1,8 +1,8 @@
 import React from 'react'
 import {ApolloProvider} from '@apollo/client'
-import Page from './Page'
-import client from './apollo'
-import styles from 'App.scss'
+import Page from '../Page/Page'
+import client from '../../config/apollo'
+import styles from './App.scss'
 
 const App = () =>
   <div className={styles.main}>
