@@ -93,7 +93,7 @@ const addCompany = (obj, company) => {
   }
   companies.push({
     id: companies.length,
-    company,
+    ...company,
   })
   return company
 }
