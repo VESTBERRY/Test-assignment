@@ -2,6 +2,10 @@ import React from 'react'
 import {GET_COMPANIES} from './Page.queries'
 import {useQuery} from '@apollo/client'
 
+import Sector from './Sectors/Sector'
+import Investment from './Investment/Investment'
+import Table from './Table/Table'
+
 export const Page = () => {
   const {loading, error, data: companyData} = useQuery(GET_COMPANIES)
 
@@ -22,24 +26,15 @@ export const Page = () => {
   const {companies} = companyData
 
   return (
-    <table>
-      <tr>
-        <th>COMPANY NAME</th>
-        <th>STAGE</th>
-        <th>SECTOR</th>
-        <th>INVESTMENT SIZE</th>
-      </tr>
-      {
-        companies.map((company, i) => (
-          <tr key={i}>
-            <td>{company.name}</td>
-            <td>{company.stage}</td>
-            <td>{company.sector}</td>
-            <td>{company.investmentSize}</td>
-          </tr>
-        ))
-      }
-    </table>
+    <div>
+      <br />
+      <Sector companies={companies} />
+      <br />
+      <Investment companies={companies} />
+      <br />
+      <Table companies={companies} />
+      <br />
+    </div>
   )
 }
 

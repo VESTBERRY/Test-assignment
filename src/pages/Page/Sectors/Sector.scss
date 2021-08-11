@@ -1,0 +1,55 @@
+.container {
+    margin: 0px 20px;
+    box-shadow: 0 1px 3px 0px grey;
+    background-color: #ffffff;
+}
+
+.sector {
+    padding: 22px;    
+    border-bottom: 1px solid #ddd;
+    color: #77a2a7;
+    background-color: #f7f9fc;
+}
+
+.sectorTitle {
+    font-size: 12px;
+    color: #0c6b7c;
+    margin: 0px;
+}
+
+.sectorContent {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    background-color: #ffffff;
+    padding: 20px 0px;
+}
+.sectorObject > h2{
+    color: #3b4452;
+    font-size: 26px;
+    margin-top: 6px;
+}
+.sectorObject > h6 { 
+    color: #0d7380;
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 2px;
+}
+
+.sectorObject {
+    border-right: 1px solid #d8dce5;
+    flex:1 ;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+.sectorObject:last-child {
+    border: 0px;
+}
+.icon {
+    width: 25px;
+    height: 25px;
+    fill: #69999f;
+    margin: 4px;
+}

@@ -2,13 +2,14 @@ html,
 body {
     padding: 0;
     margin: 0;
+    font-family: liberation-sans, sans-serif;
 }
 
 .main {
     width: 100%;
     height: 100%;
     position: relative;
-    padding-top: 55px;
+    padding-top: 61px;
 }
 
 .header {
@@ -17,7 +18,7 @@ body {
     left: 0;
     color: #ffffff;
     background-color: #2a2d33;
-    width: 100%;
+    width: calc(100% - 40px);
     padding: 20px;
     text-align: center;
     font-family: Arial;
@@ -27,4 +28,10 @@ body {
     text-align: center;
 }
 
-.content {}
+h1,h2,h3,h4,h5,h6 { margin: 0}
+
+.content {
+    background-color: #ebeef7;
+    min-height: calc(100vh - 61px);
+}
+

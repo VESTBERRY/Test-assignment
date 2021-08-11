@@ -1,0 +1,64 @@
+.modalTitle {
+    color: #0d7380;
+    padding: 20px;
+}
+
+.form {
+    width: 50%;
+}
+form > label, form > input, .input {
+    width: calc( 100% - 44px) ;
+}
+form > select {
+    width: 100%;
+}
+
+form > select:invalid,
+form > select option[value=""] {
+  color: #8e8e8e;
+}
+
+
+form > input,  form > select, .input {
+    outline: 0;
+    border: 2px solid #b9c3cd;
+    border-radius: 5px;
+    font-size: 14px;
+    padding: 12px 20px;    
+    margin: 5px 0px 25px 0px;
+}
+
+form > label {
+    font-size: 12px;
+    color: #454849;
+}
+
+.investment {
+    position : relative;
+}
+.investment::after{
+    content: 'EUR';
+    position: absolute;
+    right: 18px;
+    top :18px;
+    color: #b9c3cd;
+}
+
+input[type=submit]{
+    padding: 15px;
+    margin: 0 auto;
+    width: 170px;
+    display: flex;
+    justify-content: center;
+    border-radius: 3px;
+    background-color: #0d7380;
+    outline: 0;
+    color: white;
+    cursor: pointer;
+    border: 0;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+}
